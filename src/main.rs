@@ -1,46 +1,43 @@
 use std::{fs, process};
 use std::io::ErrorKind;
 
-use clap::Parser;
-
+mod compiler;
 mod parser;
+mod arg_parser;
+
+use arg_parser::read_args;
+
+use crate::compiler::compile;
 use crate::parser::parse; 
 
-#[derive(Parser)]
-#[command(author = "s-kybound")] 
-#[command(version = "0.0.1")]
-#[command(about = "Cody language compiler", long_about = None)]
-struct Args {
-    #[arg(short = 'i', long = "input")]
-    input_file: String,
 
-    #[arg(default_value = "a.out")]
-    #[arg(short = 'o', long = "output")]
-    output_file: String,
-}
 fn main() {
-    let cli_args = Args::parse();
+    // parse the arguments given from the command line: the input file and the output file
+    let (input_file, output_file) = read_args();
 
-    let contents = fs::read_to_string(&cli_args.input_file);
+    let contents = fs::read_to_string(&input_file);
     if let Err(contents) = contents {
         match contents.kind() {
             ErrorKind::NotFound => {
-                println!("File {} was not found!", cli_args.input_file);
+                println!("File {} was not found!", &input_file);
                 process::exit(1);
             },
             _ => {
-                println!("Error reading file {}!", cli_args.input_file);
+                println!("Error reading file {}!", &input_file);
                 process::exit(1);
             }
         }
     }
 
-    println!("Compiling file {}...", cli_args.input_file);
+    println!("Parsing program {}...", &input_file);
 
     // contents was verified to be String above. this is safe.
     let text = contents.unwrap();
 
-    // now we use the lexer on the text
+    // now we use the parser on the text
     let ast = parse(&text);
-    println!("AST: {:?}", ast);
+
+    // now we compile
+    println!("Compiling ...");
+    compile(ast, &output_file);
 }

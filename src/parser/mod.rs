@@ -1,7 +1,8 @@
-mod lexer;
-mod token_types;
-mod node_types;
 mod ast_generator;
+mod lexer;
+
+pub mod node_types;
+pub mod token_types;
 
 /// Parses a program string into an AST.
 pub fn parse(program: &str) -> node_types::ExpressionAST {
