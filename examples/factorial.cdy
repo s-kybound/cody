@@ -1,7 +1,7 @@
 ;this is a program for the factorial calculating program. 
 
 (define fact 
-    (function (n) 
+    (fn (n i x) 
         (match n
-        | 0 -> 1
+        | 0 1 -> 1
         | _ -> (* n (fact (- n 1))))))
