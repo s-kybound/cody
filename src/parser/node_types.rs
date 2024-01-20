@@ -10,7 +10,7 @@ pub enum ExpressionAST {
     NoneExpr, 
     PairExpr(Box<ExpressionAST>, Box<ExpressionAST>), // pair data
     FunctionExpr(Vec<ExpressionAST>, Box<ExpressionAST>), // function parameters and expression
-    ContExpr(Box<ExpressionAST>),  // continuation expression
+    //ContExpr(Box<ExpressionAST>),  // continuation expression
 
     // definitions
     DefineExpr(Box<ExpressionAST>, Box<ExpressionAST>), // identifier and expression
@@ -30,5 +30,5 @@ pub enum ExpressionAST {
 
     // external functions
     // ie calling c library sin with ((extern sin) 1.0)
-    ExternExpr(Box<ExpressionAST>), // name of the external function 
+    //ExternExpr(Box<ExpressionAST>), // name of the external function 
 }

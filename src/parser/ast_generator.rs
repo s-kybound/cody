@@ -1,9 +1,9 @@
-use crate::parser::token_types::Token::*;
-use crate::parser::token_types::Token; 
-use crate::parser::node_types::ExpressionAST;
-use crate::parser::node_types::ExpressionAST::*;
+//! This module is responsible for generating the AST from the tokens.
 
-/// This module is responsible for generating the AST from the tokens.
+use crate::parser::token_types::Token::{self, *};
+use crate::parser::node_types::ExpressionAST::{self, *};
+
+/// Generates the AST from the token stream.
 pub fn ast_generate(tokens: &Vec<Token>) -> ExpressionAST {
     // we treat the token stream as a stack, reversing it to pop from the front
     let mut remaining_tokens = tokens.clone();
@@ -199,7 +199,7 @@ fn parse_match(tokens: &mut Vec<Token>) -> ExpressionAST {
 
 fn parse_call(tokens: &mut Vec<Token>) -> ExpressionAST {
     let mut arguments: Vec<ExpressionAST> = Vec::new();
-    let mut function = parse(tokens);
+    let function = parse(tokens);
 
     // parse the arguments
     loop {

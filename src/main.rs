@@ -4,8 +4,7 @@ use std::io::ErrorKind;
 use clap::Parser;
 
 mod parser;
-use crate::parser::lexer::lex;
-use crate::parser::ast_generator::ast_generate;
+use crate::parser::parse; 
 
 #[derive(Parser)]
 #[command(author = "s-kybound")] 
@@ -42,7 +41,6 @@ fn main() {
     let text = contents.unwrap();
 
     // now we use the lexer on the text
-    let tokens = lex(&text);
-    let ast = ast_generate(&tokens);
+    let ast = parse(&text);
     println!("AST: {:?}", ast);
 }
