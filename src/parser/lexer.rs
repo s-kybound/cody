@@ -8,6 +8,10 @@ pub fn lex(program: &str) -> Vec<Token> {
     let formatted_program = program
     .replace("(", " ( ")
     .replace(")", " ) ")
+    .replace("[", " [ ")
+    .replace("]", " ] ")
+    .replace(".", " . ")
+    .replace("`", " ` ")
     .replace(";", " ; ")
     .replace("|", " | ")
     .replace("->", " -> ");
@@ -22,6 +26,8 @@ pub fn lex(program: &str) -> Vec<Token> {
                 // parantheses
                 "(" => tokens.push(Token::LeftPar),
                 ")" => tokens.push(Token::RightPar),
+                "[" => tokens.push(Token::LeftBkt),
+                "]" => tokens.push(Token::RightBkt),
 
                 // match case syntax
                 "|" => tokens.push(Token::Pipe),
@@ -39,10 +45,16 @@ pub fn lex(program: &str) -> Vec<Token> {
                 
                 // conditionals
                 "if" => tokens.push(Token::If),
-                "else" => tokens.push(Token::Else),
                 
                 // continuations
                 "cont" => tokens.push(Token::Cont),
+
+                // list syntax
+                "." => tokens.push(Token::Dot),
+                "`" => tokens.push(Token::Grave),
+
+                // external functions
+                "extern" => tokens.push(Token::Extern),
 
                 // integers and identifiers
                 rest => {

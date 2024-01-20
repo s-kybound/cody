@@ -22,6 +22,10 @@ pub enum Token {
 
     // scope brackets
     LeftPar, RightPar,
+    LeftBkt, RightBkt,
+
+    // list syntax (macros!)
+    Dot, Grave,
 
     // sequence expressions
     Seq,
@@ -33,11 +37,14 @@ pub enum Token {
     Identifier(String), 
 
     // conditionals
-    If, Else,
+    If,
     
     // match case
     Match, Pipe, Arrow,
 
     // continuation
     Cont,
+
+    // external functions
+    Extern,
 }
