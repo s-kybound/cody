@@ -1,8 +1,7 @@
 //! Token types for the programming language cody.
 
-#[derive(Debug)]
-
 /// The different types of tokens that the lexer can produce.
+#[derive(Clone, Debug)]
 pub enum Token {
 
     // data types
@@ -22,10 +21,12 @@ pub enum Token {
 
     // scope brackets
     LeftPar, RightPar,
-    LeftBkt, RightBkt,
-
-    // list syntax (macros!)
-    Dot, Grave,
+    
+    // pair syntax 
+    LeftBkt, RightBkt, Dot, 
+    
+    // quote syntax
+    Grave, Quote, At,
 
     // sequence expressions
     Seq,
@@ -47,4 +48,6 @@ pub enum Token {
 
     // external functions
     Extern,
+
+    EOF,
 }

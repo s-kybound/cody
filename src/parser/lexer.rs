@@ -11,12 +11,18 @@ pub fn lex(program: &str) -> Vec<Token> {
     .replace("[", " [ ")
     .replace("]", " ] ")
     .replace(".", " . ")
+    .replace("'", " ' ")
     .replace("`", " ` ")
+    .replace("@", " @ ")
     .replace(";", " ; ")
     .replace("|", " | ")
     .replace("->", " -> ");
     
     let mut tokens: Vec<Token> = Vec::new();
+    // the entire program is treated as a sequence expression, 
+    // hence we prepare the token stream to be parsed as such
+    tokens.push(Token::LeftPar);
+    tokens.push(Token::Seq);
     for curr_line in formatted_program.lines() {
         for curr_word in curr_line.split_whitespace() {
             match curr_word {
@@ -26,8 +32,6 @@ pub fn lex(program: &str) -> Vec<Token> {
                 // parantheses
                 "(" => tokens.push(Token::LeftPar),
                 ")" => tokens.push(Token::RightPar),
-                "[" => tokens.push(Token::LeftBkt),
-                "]" => tokens.push(Token::RightBkt),
 
                 // match case syntax
                 "|" => tokens.push(Token::Pipe),
@@ -49,9 +53,15 @@ pub fn lex(program: &str) -> Vec<Token> {
                 // continuations
                 "cont" => tokens.push(Token::Cont),
 
-                // list syntax
+                // pair syntax
+                "[" => tokens.push(Token::LeftBkt),
+                "]" => tokens.push(Token::RightBkt),
                 "." => tokens.push(Token::Dot),
+
+                // quote syntax
                 "`" => tokens.push(Token::Grave),
+                "'" => tokens.push(Token::Quote),
+                "@" => tokens.push(Token::At),
 
                 // external functions
                 "extern" => tokens.push(Token::Extern),
@@ -67,5 +77,10 @@ pub fn lex(program: &str) -> Vec<Token> {
             }
         }
     }
+    // add the ending of the sequence expression
+    tokens.push(Token::RightPar);
+
+    // add the last token
+    tokens.push(Token::EOF);
     tokens
 }

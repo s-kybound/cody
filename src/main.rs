@@ -5,6 +5,7 @@ use clap::Parser;
 
 mod parser;
 use crate::parser::lexer::lex;
+use crate::parser::ast_generator::ast_generate;
 
 #[derive(Parser)]
 #[command(author = "s-kybound")] 
@@ -42,7 +43,6 @@ fn main() {
 
     // now we use the lexer on the text
     let tokens = lex(&text);
-    for token in tokens {
-        println!("{:?}", token);
-    }
+    let ast = ast_generate(&tokens);
+    println!("AST: {:?}", ast);
 }
