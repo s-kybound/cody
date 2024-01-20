@@ -1,0 +1,7 @@
+;this is a program for the factorial calculating program. 
+
+(define fact 
+    (function (n) 
+        (match n
+        | 0 -> 1
+        | _ -> (* n (fact (- n 1))))))
