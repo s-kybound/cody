@@ -1,7 +1,10 @@
 ;this is a program for the factorial calculating program. 
 
 (define fact 
-    (fn (n i x) 
+    (fn (n) 
         (match n
         | 0 1 -> 1
         | _ -> ($* n (fact ($- n 1))))))
+
+(define plus-or-minus true)
+((if plus-or-minus + -) 1 2)

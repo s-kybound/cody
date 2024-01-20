@@ -1,5 +1,6 @@
 //! This module is responsible for generating the AST from the tokens.
 
+use crate::parser::token_types::AtomBinary;
 use crate::parser::token_types::Token::{self, *};
 use crate::parser::node_types::ExpressionAST::{self, *};
 
@@ -61,6 +62,9 @@ fn parse_grouping(tokens: &mut Vec<Token>) -> ExpressionAST {
 
         // // external functions
         // Extern => parse_extern(tokens),
+
+        // atomic binary operators
+        AtomicOp(op) => parse_atomic_binary(tokens, op),
 
         // identifiers or inner groupings
         Identifier(_) | LeftPar => {
@@ -196,6 +200,12 @@ fn parse_match(tokens: &mut Vec<Token>) -> ExpressionAST {
 
 //     close_grouping(tokens, extern_node)
 // }
+
+fn parse_atomic_binary(tokens: &mut Vec<Token>, op: AtomBinary) -> ExpressionAST {
+    let left = parse(tokens);
+    let right = parse(tokens);
+    close_grouping(tokens, AtomBinExpr(op, Box::new(left), Box::new(right)))
+}
 
 fn parse_call(tokens: &mut Vec<Token>) -> ExpressionAST {
     let mut arguments: Vec<ExpressionAST> = Vec::new();

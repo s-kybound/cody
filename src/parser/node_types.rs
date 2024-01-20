@@ -1,4 +1,5 @@
 //! Node types for the parser.
+use crate::parser::token_types::AtomBinary;
 
 #[derive(Clone, Debug)]
 pub enum ExpressionAST {
@@ -27,6 +28,9 @@ pub enum ExpressionAST {
 
     // sequence expressions
     SeqExpr(Vec<ExpressionAST>), // list of expressions, sequences evaluate to their last expression
+
+    // atomic binary expressions
+    AtomBinExpr(AtomBinary, Box<ExpressionAST>, Box<ExpressionAST>), // left, right, operator
 
     // external functions
     // ie calling c library sin with ((extern sin) 1.0)
