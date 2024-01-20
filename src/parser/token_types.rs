@@ -49,5 +49,29 @@ pub enum Token {
     // external functions
     Extern,
 
+    // atomic binary operators
+    AtomicOp(AtomBinary),
+
     EOF,
+}
+
+/// The different types of atomic binary operators.
+#[derive(Clone, Debug)]
+pub enum AtomBinary {
+    Add,
+    Sub,
+    Mul,
+    Div,
+    // Mod,
+    // Pow,
+    And,
+    Or,
+    Not,
+    // Xor,
+    // Shl,
+    // Shr,
+    Eq,
+    Lt,
+    // Leq,
+    // Geq,
 }
