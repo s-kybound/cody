@@ -32,15 +32,15 @@ pub fn lex(program: &str) -> Vec<Token> {
     .replace("->", " -> ")
     
     // atomic binary operators that we will use to bulld the basic library
-    .replace("$+", " $+ ")
-    .replace("$-", " $- ")
-    .replace("$*", " $* ")
-    .replace("$/", " $/ ")
-    .replace("$=", " $= ")
-    .replace("$<", " $< ")
-    .replace("$!", " $! ")
-    .replace("$&", " $& ")
-    .replace("$|", " $| ");
+    .replace("+", " $+ ")
+    .replace("-", " $- ")
+    .replace("*", " $* ")
+    .replace("/", " $/ ")
+    .replace("=", " $= ")
+    .replace("<", " $< ")
+    .replace("!", " $! ")
+    .replace("&", " $& ")
+    .replace("|", " $| ");
     
     let mut tokens: Vec<Token> = Vec::new();
     // the entire program is treated as a sequence expression, 

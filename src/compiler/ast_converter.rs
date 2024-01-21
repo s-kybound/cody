@@ -51,7 +51,29 @@ impl Codegen for ExpressionAST {
             // ExpressionAST::CallExpr(_, _) => context.i32_type().const_int(42, false).as_basic_value(),
             
             // conditionals
-            // ExpressionAST::IfExpr(_, _, _) => context.i32_type().const_int(42, false).as_basic_value(),
+            ExpressionAST::IfExpr(pred, conseq, alt) => {
+                let pred_value: IntValue<'a> = pred.codegen(context, builder, scope);
+                let pred_type: IntType<'a> = pred_value.get_type();
+                let pred_bool_value: IntValue<'a> = builder.build_int_compare(inkwell::IntPredicate::NE, pred_value, pred_type.const_int(0, false), "ifcond")
+                    .expect("Failed to build if condition.");
+                let function: FunctionValue<'a> = builder.get_insert_block().unwrap().get_parent().unwrap();
+                let then_block: inkwell::basic_block::BasicBlock = context.append_basic_block(function, "then");
+                let else_block: inkwell::basic_block::BasicBlock = context.append_basic_block(function, "else");
+                let merge_block: inkwell::basic_block::BasicBlock = context.append_basic_block(function, "ifcont");
+                builder.build_conditional_branch(pred_bool_value, then_block, else_block);
+                builder.position_at_end(then_block);
+                let conseq_value: IntValue<'a> = conseq.codegen(context, builder, scope);
+                builder.build_unconditional_branch(merge_block);
+                let then_block: inkwell::basic_block::BasicBlock = builder.get_insert_block().unwrap();
+                builder.position_at_end(else_block);
+                let alt_value: IntValue<'a> = alt.codegen(context, builder, scope);
+                builder.build_unconditional_branch(merge_block);
+                let else_block: inkwell::basic_block::BasicBlock = builder.get_insert_block().unwrap();
+                builder.position_at_end(merge_block);
+                let phi_node: inkwell::values::PhiValue<'a> = builder.build_phi(context.i32_type(), "iftmp").unwrap();
+                phi_node.add_incoming(&[(&conseq_value, then_block), (&alt_value, else_block)]);
+                phi_node.as_basic_value().into_int_value()
+            },
 
             // match case
             // ExpressionAST::MatchExpr(_, _) => context.i32_type().const_int(42, false).as_basic_value(),
