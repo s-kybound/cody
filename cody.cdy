@@ -1,0 +1,6 @@
+;; num              ::= 0 | 1 | 2 | ...
+;; expr             ::= num | identifier | call | seq | conditional
+;; call             ::= ( operator-expr operand-expr* )
+;; operator-expr    ::= + | - | * | / | & | | | ! 
+;; conditional      ::= ( if pred-expr conseq alt )
+;; sequence         ::= ( seq expr* basic.cdy)
